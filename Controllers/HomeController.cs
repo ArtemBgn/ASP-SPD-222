@@ -32,17 +32,30 @@ namespace ASP_SPD_222.Controllers
                 ControllerName = this.GetType().Name,
             };
             return View(model);
-        }        
+        }
+        public IActionResult AllHomeWorkAspOne()
+        {
+            return View();
+        }
         public IActionResult HomeWorkAspOne()
         {
             HomeWorkAspOneViewModel model1 = new()
             {
-                Day = DateTime.Now.Day,
-                /*Date = DateOnly.FromDateTime(DateTime.Today),
-                Time = TimeOnly.FromDateTime(DateTime.Now),
-                ControllerName = this.GetType().Name,*/
-            };/**/
+                Day = DateTime.Now.DayOfYear,
+            };
             return View(model1);
+        }
+        public IActionResult HomeWorkAspTaskTwo()
+        {
+            String str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            Random random = new Random();
+            int r = random.Next(0, 25);
+
+            HomeWorkAspTaskTwoViewModel model2 = new()
+            {
+                EnglishLetter = str.ToCharArray()[r],
+            };
+            return View(model2);
         }
         public IActionResult Razor()
         {
