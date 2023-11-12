@@ -32,6 +32,17 @@ namespace ASP_SPD_222.Controllers
                 ControllerName = this.GetType().Name,
             };
             return View(model);
+        }        
+        public IActionResult HomeWorkAspOne()
+        {
+            HomeWorkAspOneViewModel model1 = new()
+            {
+                Day = DateTime.Now.Day,
+                /*Date = DateOnly.FromDateTime(DateTime.Today),
+                Time = TimeOnly.FromDateTime(DateTime.Now),
+                ControllerName = this.GetType().Name,*/
+            };/**/
+            return View(model1);
         }
         public IActionResult Razor()
         {
