@@ -16,3 +16,11 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.vidstup {
+    height: 50vh;
+}
+
+.vidstup2 {
+    bottom: 30vh;
+}

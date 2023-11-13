@@ -61,8 +61,27 @@ namespace ASP_SPD_222.Controllers
         {
             ViewData["formController"] = "Hello from Controller";
             return View();
+        }        
+         public IActionResult BruklinLend()
+        {
+            return View();
         }
+        public IActionResult HomeWorkAspTaskFour()
+        {
+            string[] str = {"Добремісто", "Бруклин", "Браво-Пицца", "Майфемели"};
+            Random random = new Random();
+            int r = random.Next(0, 3);
 
+            HomeWorkAspTaskFourViewModel model4 = new()
+            {
+                NameTavern = str[r],
+            };
+            return View(model4);
+        }
+        public IActionResult Cuntry()
+        {
+            return View();
+        }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
