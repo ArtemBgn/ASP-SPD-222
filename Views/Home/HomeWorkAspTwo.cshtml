@@ -1,0 +1,62 @@
+﻿@using ASP_SPD_222.Services.Val;
+@inject ASP_SPD_222.Services.Val.IValService valService
+@{
+    ViewData["Title"] = "Validation";
+}
+<h1 class="display-4">@ViewData["Title"]</h1>
+
+<form asp-action="ProcessValForm" method="post">
+    <div class="input-group">
+        <span class="input-group-text">First and last name</span>
+        <input name="user-firstname" type="text" aria-label="First name" class="form-control">
+        <input name="user-lastname" type="text" aria-label="Last name" class="form-control">
+    </div>
+    <div class="input-group">
+        <span class="input-group-text">Tel and mail</span>
+        <input name="user-tel" type="text" aria-label="Last name" class="form-control">
+        <input name="user-mail" type="text" aria-label="Last name" class="form-control">
+    </div>
+    <button class="btn btn-secondary">Send</button>
+</form>
+
+@if (Model.FormModelVal?.UserFirstname != null)
+{
+    <p>
+        Є передача даних форми: <br />
+        @Model.FormModelVal.UserFirstname<br />
+        @Model.FormModelVal.UserLastname<br />
+        @Model.FormModelVal.UserTel<br />
+        @Model.FormModelVal.UserMail<br />
+    </p>
+    <h1>Перевірка на валідність</h1>
+    /*<p>@valService.ValString(@Model.FormModelVal.UserFirstname);</p>
+    <p>@valService.ValString(@Model.FormModelVal.UserLastname);</p>
+    <p>@valService.ValString(@Model.FormModelVal.UserTel);</p>
+    <p>@valService.ValString(@Model.FormModelVal.UserMail);</p>//*/
+    <table>
+        <thead>
+            <tr>
+                <th>Позиція</th>
+                <th>Валідність</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@Model.FormModelVal.UserFirstname</td>
+                <td>@valService.ValString(@Model.FormModelVal.UserFirstname)</td>
+            </tr>
+            <tr>
+                <td>@Model.FormModelVal.UserLastname</td>
+                <td>@valService.ValString(@Model.FormModelVal.UserLastname)</td>
+            </tr>
+            <tr>
+                <td>@Model.FormModelVal.UserTel</td>
+                <td>@valService.ValString(@Model.FormModelVal.UserTel)</td>
+            </tr>
+            <tr>
+                <td>@Model.FormModelVal.UserMail</td>
+                <td>@valService.ValString(@Model.FormModelVal.UserMail)</td>
+            </tr>
+        </tbody>
+    </table>
+}
