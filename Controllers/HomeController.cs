@@ -127,7 +127,7 @@ namespace ASP_SPD_222.Controllers
             {
                 if( (formModelVal.UserFirstname != null) || (formModelVal.UserLastname != null) || (formModelVal.UserTel != null) || (formModelVal.UserMail != null) )
                 {
-                    if ( (_valService.ValNameString(formModelVal.UserFirstname)) && (_valService.ValNameString(formModelVal.UserLastname)) && (_valService.ValNameString(formModelVal.UserTel)) && (_valService.ValNameString(formModelVal.UserMail)) )
+                    if ( (_valService.ValNameString(formModelVal.UserFirstname)) && (_valService.ValNameString(formModelVal.UserLastname)) && (_valService.ValTelString(formModelVal.UserTel)) && (_valService.ValMailString(formModelVal.UserMail)) )
                     {
                         HttpContext.Session.SetString("FormModelVal", JsonSerializer.Serialize(formModelVal));
                     }
