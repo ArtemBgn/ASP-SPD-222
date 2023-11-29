@@ -32,7 +32,7 @@ namespace ASP_SPD_222.Controllers
         public IActionResult Privacy()
         {
             return View();
-        }        
+        }
 
         public IActionResult AllHomeWorkAspOne()
         {
@@ -88,7 +88,7 @@ namespace ASP_SPD_222.Controllers
             //використовуємо сервіс
             ViewData["hash"] = _hashService.HexString("123");
             ViewData["objHash"] = _hashService.GetHashCode();
-            ViewData["valid"] = _valService.ValString("123");
+            //ViewData["valid"] = _valService.ValString("123");
             return View();
         }
         public ViewResult Transfer()
@@ -127,14 +127,14 @@ namespace ASP_SPD_222.Controllers
             {
                 if( (formModelVal.UserFirstname != null) || (formModelVal.UserLastname != null) || (formModelVal.UserTel != null) || (formModelVal.UserMail != null) )
                 {
-                    if (_valService.ValString(formModelVal.UserLastname))
+                    if ( (_valService.ValNameString(formModelVal.UserFirstname)) && (_valService.ValNameString(formModelVal.UserLastname)) && (_valService.ValNameString(formModelVal.UserTel)) && (_valService.ValNameString(formModelVal.UserMail)) )
                     {
                         HttpContext.Session.SetString("FormModelVal", JsonSerializer.Serialize(formModelVal));
                     }
                     else
                     {
                         //formModelVal.UserFirstname = "Ім'я не валідне";
-                        formModelVal.UserLastname = "Прізвище не валідне";
+                        formModelVal.UserLastname = "Ojcm  не валідне";
                         HttpContext.Session.SetString("FormModelVal", JsonSerializer.Serialize(formModelVal));
                     }
                 }

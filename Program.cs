@@ -16,6 +16,7 @@ builder.Services.AddControllersWithViews();
 // –еЇструЇмо власн≥ серв≥си
 builder.Services.AddSingleton<IHashService, Sha1HashService>();
 builder.Services.AddSingleton<IValService, NameValService>();
+//builder.Services.AddSingleton<IValService,>();
 //builder.Services.AddSingleton<IValService, TelValService>();
 //builder.Services.AddSingleton<IValService, MailValService>();
 
