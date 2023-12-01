@@ -2,7 +2,7 @@
 {
     public class HomeWorkAspTwoViewModel
     {
-        public String ControllerName { get; set; } = "none";
+        //public String ControllerName { get; set; } = "none";
         public HomeWorkAspTwoFormModel? FormModelVal { get; set; }
     }
 }

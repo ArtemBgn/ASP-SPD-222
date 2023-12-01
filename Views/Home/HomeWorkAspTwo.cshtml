@@ -5,19 +5,52 @@
 }
 <h1 class="display-4">@ViewData["Title"]</h1>
 
-<form asp-action="ProcessValForm" method="post">
-    <div class="input-group">
-        <span class="input-group-text">First and last name</span>
-        <input name="user-firstname" type="text" aria-label="First name" class="form-control">
-        <input name="user-lastname" type="text" aria-label="Last name" class="form-control">
-    </div>
-    <div class="input-group">
-        <span class="input-group-text">Tel and mail</span>
-        <input name="user-tel" type="text" aria-label="Last name" class="form-control">
-        <input name="user-mail" type="text" aria-label="Last name" class="form-control">
-    </div>
-    <button class="btn btn-secondary">Send</button>
-</form>
+
+@if ((Model.FormModelVal != null) && !(valService.ValNameString(Model.FormModelVal.UserFirstname) && valService.ValNameString(Model.FormModelVal.UserLastname) && valService.ValTelString(Model.FormModelVal.UserTel) && valService.ValMailString(Model.FormModelVal.UserMail)) )
+{
+    var FormModelValUserFirstname = "";
+    var FormModelValUserLastname = "";
+    var FormModelValUserTel = "";
+    var FormModelValUserMail = "";
+
+    @if (Model.FormModelVal?.UserFirstname != null) { FormModelValUserFirstname = Model.FormModelVal.UserFirstname; }
+    else { FormModelValUserFirstname = ""; }
+    @if (Model.FormModelVal?.UserLastname != null) { FormModelValUserLastname = Model.FormModelVal.UserLastname; }
+    else { FormModelValUserLastname = ""; }
+    @if (Model.FormModelVal?.UserTel != null) { FormModelValUserTel = Model.FormModelVal.UserTel; }
+    else { FormModelValUserTel = ""; }
+    @if (Model.FormModelVal?.UserMail != null) { FormModelValUserMail = Model.FormModelVal.UserMail; }
+    else { FormModelValUserMail = ""; }
+    <form asp-action="ProcessValForm" method="post">
+        <div class="input-group">
+            <span class="input-group-text">First and last name</span>
+            <input name="user-firstname" type="text" aria-label="First name" class="form-control" value="@FormModelValUserFirstname">
+            <input name="user-lastname" type="text" aria-label="Last name" class="form-control" value="@FormModelValUserLastname">
+        </div>
+        <div class="input-group">
+            <span class="input-group-text">Tel and mail</span>
+            <input name="user-tel" type="text" aria-label="Last name" class="form-control" value="@FormModelValUserTel">
+            <input name="user-mail" type="text" aria-label="Last name" class="form-control" value="@FormModelValUserMail">
+        </div>
+        <button class="btn btn-secondary">Send</button>
+    </form>
+}
+else
+{
+    <form asp-action="ProcessValForm" method="post">
+        <div class="input-group">
+            <span class="input-group-text">First and last name</span>
+            <input name="user-firstname" type="text" aria-label="First name" class="form-control">
+            <input name="user-lastname" type="text" aria-label="Last name" class="form-control">
+        </div>
+        <div class="input-group">
+            <span class="input-group-text">Tel and mail</span>
+            <input name="user-tel" type="text" aria-label="Last name" class="form-control">
+            <input name="user-mail" type="text" aria-label="Last name" class="form-control">
+        </div>
+        <button class="btn btn-secondary">Send</button>
+    </form>
+}
 
 @if (Model.FormModelVal?.UserFirstname != null)
 {
@@ -28,35 +61,44 @@
         @Model.FormModelVal.UserTel<br />
         @Model.FormModelVal.UserMail<br />
     </p>
+}
+
+@if ( Model.FormModelVal != null )
+{
     <h1>Перевірка на валідність</h1>
-    /*<p>@valService.ValString(@Model.FormModelVal.UserFirstname);</p>
-    <p>@valService.ValString(@Model.FormModelVal.UserLastname);</p>
-    <p>@valService.ValString(@Model.FormModelVal.UserTel);</p>
-    <p>@valService.ValString(@Model.FormModelVal.UserMail);</p>//*/
-    <table>
-        <thead>
-            <tr>
-                <th>Позиція</th>
-                <th>Валідність</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>@Model.FormModelVal.UserFirstname</td>
-                <td>@valService.ValNameString(@Model.FormModelVal.UserFirstname)</td>
-            </tr>
-            <tr>
-                <td>@Model.FormModelVal.UserLastname</td>
-                <td>@valService.ValNameString(@Model.FormModelVal.UserLastname)</td>
-            </tr>
-            <tr>
-                <td>@Model.FormModelVal.UserTel</td>
-                <td>@valService.ValTelString(@Model.FormModelVal.UserTel)</td>
-            </tr>
-            <tr>
-                <td>@Model.FormModelVal.UserMail</td>
-                <td>@valService.ValMailString(@Model.FormModelVal.UserMail)</td>
-            </tr>
-        </tbody>
-    </table>
+    if (!(valService.ValNameString(Model.FormModelVal.UserFirstname) && valService.ValNameString(Model.FormModelVal.UserLastname) && valService.ValTelString(Model.FormModelVal.UserTel) && valService.ValMailString(Model.FormModelVal.UserMail)))
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th>Позиція</th>
+                    <th>Значення</th>
+                    <th>Валідність</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Ім'я</td>
+                    <td>@Model.FormModelVal.UserFirstname</td>
+                    <td>@valService.ValNameString(@Model.FormModelVal.UserFirstname)</td>
+                </tr>
+                <tr>
+                    <td>Прізвище</td>
+                    <td>@Model.FormModelVal.UserLastname</td>
+                    <td>@valService.ValNameString(@Model.FormModelVal.UserLastname)</td>
+                </tr>
+                <tr>
+                    <td>Телефон</td>
+                    <td>@Model.FormModelVal.UserTel</td>
+                    <td>@valService.ValTelString(@Model.FormModelVal.UserTel)</td>
+                </tr>
+                <tr>
+                    <td>E-mail</td>
+                    <td>@Model.FormModelVal.UserMail</td>
+                    <td>@valService.ValMailString(@Model.FormModelVal.UserMail)</td>
+                </tr>
+            </tbody>
+        </table>
+    }
+    else {<h3>ВСЕ ВАЛІДНЕ</h3>}
 }

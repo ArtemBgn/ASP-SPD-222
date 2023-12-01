@@ -7,6 +7,7 @@ namespace ASP_SPD_222.Services.Val
     {
         public bool ValNameString(string input)
         {
+            if (input == null) { return false; }
             bool res = true;
             char[] tmp = input.ToUpper().ToCharArray();
             string abets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ'АБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩьЮЯ";
@@ -21,10 +22,12 @@ namespace ASP_SPD_222.Services.Val
         }
         public bool ValTelString(String input)
         {
+            if (input == null) { return false; }
             return Regex.Match(input, @"^\+380+([0-9]{9})+$").Success;
         }
         public bool ValMailString(String input)
         {
+            if (input == null) { return false; }
             return Regex.Match(input, @"^[^@\s]+@[^@\s]+\.[^@\s]+$").Success;
         }
     }

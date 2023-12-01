@@ -127,16 +127,7 @@ namespace ASP_SPD_222.Controllers
             {
                 if( (formModelVal.UserFirstname != null) || (formModelVal.UserLastname != null) || (formModelVal.UserTel != null) || (formModelVal.UserMail != null) )
                 {
-                    if ( (_valService.ValNameString(formModelVal.UserFirstname)) && (_valService.ValNameString(formModelVal.UserLastname)) && (_valService.ValTelString(formModelVal.UserTel)) && (_valService.ValMailString(formModelVal.UserMail)) )
-                    {
-                        HttpContext.Session.SetString("FormModelVal", JsonSerializer.Serialize(formModelVal));
-                    }
-                    else
-                    {
-                        //formModelVal.UserFirstname = "Ім'я не валідне";
-                        formModelVal.UserLastname = "Ojcm  не валідне";
-                        HttpContext.Session.SetString("FormModelVal", JsonSerializer.Serialize(formModelVal));
-                    }
+                    HttpContext.Session.SetString("FormModelVal", JsonSerializer.Serialize(formModelVal));
                 }
             }
             
@@ -154,12 +145,9 @@ namespace ASP_SPD_222.Controllers
             else { formModelVal = null; }
             HomeWorkAspTwoViewModel model = new()
             {
-                ControllerName = this.GetType().Name,
+                //ControllerName = this.GetType().Name,
                 FormModelVal = formModelVal
             };
-
-            
-
             return View(model);
         }
         public ViewResult Db()
