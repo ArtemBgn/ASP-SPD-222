@@ -154,6 +154,10 @@ namespace ASP_SPD_222.Controllers
         {  
             return View();
         }
+        public ViewResult SignUp()
+        {
+            return View();
+        }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
