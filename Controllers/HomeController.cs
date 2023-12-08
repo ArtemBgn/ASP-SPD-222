@@ -130,7 +130,6 @@ namespace ASP_SPD_222.Controllers
                     HttpContext.Session.SetString("FormModelVal", JsonSerializer.Serialize(formModelVal));
                 }
             }
-            
             return RedirectToAction(nameof(HomeWorkAspTwo));
         }
 

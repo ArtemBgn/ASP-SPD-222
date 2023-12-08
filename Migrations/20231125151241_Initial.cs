@@ -42,12 +42,12 @@ namespace ASP_SPD_222.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
         }
-
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "Users",
                 schema: "ASP_SPD_222");
         }
+
     }
 }

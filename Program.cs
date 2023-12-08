@@ -20,18 +20,24 @@ builder.Services.AddSingleton<IValService, NameValService>();
 //builder.Services.AddSingleton<IValService, TelValService>();
 //builder.Services.AddSingleton<IValService, MailValService>();
 
-String? connectionString = builder.Configuration.GetConnectionString("PlanetScale");
+String? connectionString =
+    builder
+    .Configuration
+    .GetConnectionString("PlanetScale");
 MySqlConnection connection = new(connectionString);
 builder.Services.AddDbContext<DataContext>(options =>
-        options.UseMySql(connection, 
-                         ServerVersion.AutoDetect(connection),
-                            serverOptions => serverOptions
-                            .MigrationsHistoryTable(
-                                                tableName: HistoryRepository.DefaultTableName,
-                                                    schema: "ASP_SPD_222")
-                            .SchemaBehavior(
-                                                MySqlSchemaBehavior.Translate,
-                                                (schema, table) => $"{schema}_{table}")));
+    options.UseMySql(
+        connection,
+        ServerVersion.AutoDetect(connection),
+            serverOptions => serverOptions
+            .MigrationsHistoryTable(
+                tableName: HistoryRepository.DefaultTableName,
+                schema: "ASP_SPD_222")
+            .SchemaBehavior(
+                MySqlSchemaBehavior.Translate,
+                (schema, table) => $"{schema}_{table}")
+     )
+);
 
 builder.Services.AddDistributedMemoryCache();
 
