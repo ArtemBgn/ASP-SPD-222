@@ -34,7 +34,7 @@ namespace ASP_SPD_222.Migrations
                     Avatar = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     RegisterDt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    DeletDt = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                    DeleteDt = table.Column<DateTime>(type: "datetime(6)", nullable: true)
                 },
                 constraints: table =>
                 {

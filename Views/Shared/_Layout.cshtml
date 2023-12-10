@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims;
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -7,6 +8,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ASP-SPD-222.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
 </head>
 <body>
     <header>
@@ -35,6 +37,34 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Cuntry">Cuntry</a>
                         </li>
                     </ul>
+                    @*
+                        Перевіряємо чи автетнтифікації
+                        та додаємо кнопку виходу
+                    *@
+                    @if(Context.User.Identity?.IsAuthenticated ?? false)
+                    {
+                        String avatar = Context.User.Claims
+                        .First(claim => claim.Type == ClaimTypes.UserData)
+                        .Value;
+                        if (String.IsNullOrEmpty(avatar)) avatar = "no-photo.png";
+                        <img src="/avatars/@(avatar)" class="nav-avatar" />
+                        <button type="button"
+                                id="auth-signout-button"
+                                class="btn btn-outline-info">                                
+                            <i class="bi bi-box-arrow-right"></i>
+                        </button>
+                        
+                    }
+                    else
+                    {
+                        <!-- Button trigger modal -->
+                        <button type="button"
+                                class="btn btn-outline-secondary"
+                                data-bs-toggle="modal"
+                                data-bs-target="#authModal">
+                            <i class="bi bi-box-arrow-in-right"></i>
+                        </button>
+                    }
                 </div>
             </div>
         </nav>
@@ -52,7 +82,32 @@
         </div>
     </footer>
 
-
+    <!-- Modal -->
+    <div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="authModalLabel">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="auth-login" class="form-label">Логін:</label>
+                        <input type="text" class="form-control" id="auth-login" name="login" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="auth-password" class="form-label">Пароль:</label>
+                        <input type="password" class="form-control" id="auth-password" name="password" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div id="auth-message"class="alert alert-danger visually-hidden" role="alert"></div>
+                    <a asp-controller="Home" asp-action="SignUp" class="btn btn-info">Реєстрація</a>
+                    <button id="auth-button" type="button" class="btn btn-primary">Увійти</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

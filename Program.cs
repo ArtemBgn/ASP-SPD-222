@@ -1,4 +1,5 @@
 using ASP_SPD_222.Data;
+using ASP_SPD_222.Middleware;
 using ASP_SPD_222.Services.Hash;
 using ASP_SPD_222.Services.Val;
 using Microsoft.EntityFrameworkCore;
@@ -66,6 +67,9 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.UseSession();
+
+//Включення нашого Middleware у ланцюг
+app.UseMiddleware<AuthSessionMiddleware>();
 
 app.MapControllerRoute(
     name: "default",

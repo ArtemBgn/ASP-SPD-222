@@ -1,4 +1,5 @@
-﻿using ASP_SPD_222.Models;
+﻿using ASP_SPD_222.Data;
+using ASP_SPD_222.Models;
 using ASP_SPD_222.Models.Home;
 using ASP_SPD_222.Services.Hash;
 using ASP_SPD_222.Services.Val;
@@ -15,13 +16,15 @@ namespace ASP_SPD_222.Controllers
         private readonly IHashService _hashService; //DIP - тип залежності - це інтерфейс
         private readonly IValService _valService;
         private readonly ILogger<HomeController> _logger;
+        private readonly DataContext _dataContext;
 
         // конструктор зазначає необхідні залежносі, їх передає - Resolver (Injector)
-        public HomeController(ILogger<HomeController> logger, IHashService hashService, IValService valService)
+        public HomeController(ILogger<HomeController> logger, IHashService hashService, IValService valService, DataContext dataContext)
         {
             _logger = logger;
             _hashService = hashService;
             _valService = valService;
+            _dataContext = dataContext;
         }
 
         public IActionResult Index()
@@ -127,12 +130,24 @@ namespace ASP_SPD_222.Controllers
             {
                 if( (formModelVal.UserFirstname != null) || (formModelVal.UserLastname != null) || (formModelVal.UserTel != null) || (formModelVal.UserMail != null) )
                 {
+                    if(_valService.ValNameString(formModelVal.UserFirstname) && _valService.ValNameString(formModelVal.UserLastname) && _valService.ValTelString(formModelVal.UserTel) && _valService.ValMailString(formModelVal.UserMail))
+                    {
+                        _dataContext.MyFormDataBases.Add(new()
+                        {
+                            Id = Guid.NewGuid(),
+                            Firstname = formModelVal.UserFirstname,
+                            Lastname = formModelVal.UserLastname,
+                            Tel = formModelVal.UserTel,
+                            Mail = formModelVal.UserMail,
+                            MomentReg = DateTime.Now,
+                        });
+                        _dataContext.SaveChanges();
+                    }
                     HttpContext.Session.SetString("FormModelVal", JsonSerializer.Serialize(formModelVal));
                 }
             }
             return RedirectToAction(nameof(HomeWorkAspTwo));
         }
-
         public ViewResult HomeWorkAspTwo()
         {
             HomeWorkAspTwoFormModel? formModelVal;
@@ -147,6 +162,7 @@ namespace ASP_SPD_222.Controllers
                 //ControllerName = this.GetType().Name,
                 FormModelVal = formModelVal
             };
+
             return View(model);
         }
         public ViewResult Db()
@@ -155,7 +171,129 @@ namespace ASP_SPD_222.Controllers
         }
         public ViewResult SignUp()
         {
-            return View();
+            SignupViewModel viewModel = new();
+
+            // перевіряємо, чи є дані від форми
+            if (HttpContext.Session.Keys.Contains("formStatus"))
+            {
+                // декодуємо статус
+                viewModel.FormStatus = Convert.ToBoolean(
+                    HttpContext.Session.GetString("formStatus"));
+                HttpContext.Session.Remove("formStatus");
+
+                // перевіряємо - якщо помилковий, то у сесії дані валідації і моделі
+                if (viewModel.FormStatus ?? false)
+                {
+                    viewModel.FormModel = null;
+                    viewModel.FormValidation = null;
+                }
+                else
+                {
+                    viewModel.FormModel = JsonSerializer
+                        .Deserialize<SignupFormModel>(
+                            HttpContext.Session.GetString("formModel")!);
+                    HttpContext.Session.Remove("formModel");
+
+                    viewModel.FormValidation = JsonSerializer
+                        .Deserialize<SignupFormValidation>(
+                            HttpContext.Session.GetString("formValidation")!);
+                    HttpContext.Session.Remove("formValidation");
+                }
+            }
+            return View(viewModel);
+        }
+        [HttpPost]
+        public RedirectToActionResult SignupForm(SignupFormModel model)
+        {
+            SignupFormValidation results = new();
+            bool isFormValid = true;
+            if (String.IsNullOrEmpty(model.Login))
+            {
+                results.LoginErrorMessage = "Логін не може бути порожним";
+                isFormValid = false;
+            }
+            if (String.IsNullOrEmpty(model.Name))
+            {
+                results.NameErrorMessage = "ПІБ не може бути порожним";
+                isFormValid = false;
+            }
+            if (String.IsNullOrEmpty(model.Email))
+            {
+                results.EmailErrorMessage = "Email не може бути порожним";
+                isFormValid = false;
+            }
+            if (String.IsNullOrEmpty(model.Password))
+            {
+                results.PasswordErrorMessage = "Пароль не може бути порожним";
+                isFormValid = false;
+            }
+            if (model.Password != model.Repeat)
+            {
+                results.RepeatErrorMessage = "Повтор не збігається з паролем";
+                isFormValid = false;
+            }
+
+            if (isFormValid && model.Avatar != null &&
+                model.Avatar.Length > 0)  // поле не обов'язкове, але якщо є, то перевіряємо
+            {
+                // при збереженні (uploading) файлів слід міняти їх імена.
+                int dotPosition = model.Avatar.FileName.LastIndexOf(".");
+                if (dotPosition == -1)
+                {
+                    results.AvatarErrorMessage = "Файли без розширення не приймаються";
+                    isFormValid = false;
+                }
+                else
+                {
+                    String ext = model.Avatar.FileName.Substring(dotPosition);
+                    // TODO: додати перевірку розширення на перелік дозволених
+
+                    // генеруємо випадкове ім'я файлу, зберігаємо розширення
+                    // контролюємо, що такого імені немає у сховищі
+                    String dir = Directory.GetCurrentDirectory();
+                    String savedName;
+                    String fileName;
+                    do
+                    {
+                        fileName = Guid.NewGuid() + ext;
+                        savedName = Path.Combine(dir, "wwwroot", "avatars", fileName);
+                    }
+                    while (System.IO.File.Exists(savedName));
+                    using Stream stream = System.IO.File.OpenWrite(savedName);
+                    model.Avatar.CopyTo(stream);
+
+                    // до цього місця доходимо у разі відсутності помилок валідації
+                    // додаємо нового користувача до БД
+                    
+                    String salt = _hashService.HexString(Guid.NewGuid().ToString());
+                    String dk = _hashService.HexString(salt + model.Password);
+                    _dataContext.Users.Add(new()
+                    {
+                        Id = Guid.NewGuid(),
+                        Login = model.Login,
+                        Name = model.Name,
+                        Avatar = fileName,
+                        RegisterDt = DateTime.Now,
+                        DeleteDt = null,
+                        Email = model.Email,
+                        PasswordSalt = salt,
+                        PasswordDk = dk,
+                    });
+                    _dataContext.SaveChanges();//*/
+                }
+            }
+                if (!isFormValid)
+            {
+                HttpContext.Session.SetString("formModel",
+                    JsonSerializer.Serialize(model));
+
+                HttpContext.Session.SetString("formValidation",
+                    JsonSerializer.Serialize(results));
+            }
+            HttpContext.Session.SetString("formStatus",
+                isFormValid.ToString());
+
+            return RedirectToAction(nameof(SignUp));//*/
         }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

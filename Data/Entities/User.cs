@@ -10,6 +10,6 @@
         public String   PasswordDk      { get; set; } = null;   // Derived key (RFC 2898)
         public String?  Avatar          { get; set; }           // filename/URL
         public DateTime RegisterDt      { get; set; }
-        public DateTime? DeletDt        { get; set; }
+        public DateTime? DeleteDt        { get; set; }
     }
 }

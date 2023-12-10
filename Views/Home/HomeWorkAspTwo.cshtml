@@ -21,34 +21,115 @@
     else { FormModelValUserTel = ""; }
     @if (Model.FormModelVal?.UserMail != null) { FormModelValUserMail = Model.FormModelVal.UserMail; }
     else { FormModelValUserMail = ""; }
+
     <form asp-action="ProcessValForm" method="post">
-        <div class="input-group">
-            <span class="input-group-text">First and last name</span>
-            <input name="user-firstname" type="text" aria-label="First name" class="form-control" value="@FormModelValUserFirstname">
-            <input name="user-lastname" type="text" aria-label="Last name" class="form-control" value="@FormModelValUserLastname">
+        <div class="row">
+            <div class="col">
+                <div class="input-group mb-3">
+                    <span class="input-group-text"
+                          id="first-name"><i class="bi bi-person"></i></span>
+                    <input type="text" class="form-control"
+                           placeholder="Ім'я" aria-label="Ім'я"
+                           name="user-firstname"
+                           aria-describedby="first-name"
+                           value="@FormModelValUserFirstname">
+                </div>
+            </div>
+            <div class="col">
+                <div class="input-group mb-3">
+                    <span class="input-group-text"
+                          id="last-name"><i class="bi bi-person"></i></span>
+                    <input type="text" class="form-control"
+                           placeholder="Прізвище" aria-label="Прі"
+                           name="user-lastname"
+                           aria-describedby="last-name"
+                           value="@FormModelValUserLastname">
+                </div>
+            </div>
         </div>
-        <div class="input-group">
-            <span class="input-group-text">Tel and mail</span>
-            <input name="user-tel" type="text" aria-label="Last name" class="form-control" value="@FormModelValUserTel">
-            <input name="user-mail" type="text" aria-label="Last name" class="form-control" value="@FormModelValUserMail">
+        <div class="row">
+            <div class="col">
+                <div class="input-group mb-3">
+                    <span class="input-group-text"
+                          id="tel-addon"><i class="bi bi-phone"></i></span>
+                    <input type="text" class="form-control"
+                           placeholder="Телефон" aria-label="Телефон"
+                           name="user-tel"
+                           aria-describedby="tel-addon"
+                           value="@FormModelValUserTel">
+                </div>
+            </div>
+            <div class="col">
+                <div class="input-group mb-3">
+                    <span class="input-group-text"
+                          id="email-addon"><i class="bi bi-envelope-at"></i></span>
+                    <input type="text" class="form-control"
+                           placeholder="Е-пошта" aria-label="Е-пошта"
+                           name="user-mail"
+                           aria-describedby="email-addon"
+                           value="@FormModelValUserMail">
+                </div>
+            </div>
         </div>
-        <button class="btn btn-secondary">Send</button>
+        <div class="row">
+            <div class="col">
+                <button class="btn btn-success" type="submit">Send</button>
+            </div>
+        </div>
     </form>
 }
 else
 {
     <form asp-action="ProcessValForm" method="post">
-        <div class="input-group">
-            <span class="input-group-text">First and last name</span>
-            <input name="user-firstname" type="text" aria-label="First name" class="form-control">
-            <input name="user-lastname" type="text" aria-label="Last name" class="form-control">
+        <div class="row">
+            <div class="col">
+                <div class="input-group mb-3">
+                    <span class="input-group-text"
+                          id="first-name"><i class="bi bi-person"></i></span>
+                    <input type="text" class="form-control"
+                           placeholder="Ім'я" aria-label="Ім'я"
+                           name="user-firstname"
+                           aria-describedby="first-name">
+                </div>
+            </div>
+            <div class="col">
+                <div class="input-group mb-3">
+                    <span class="input-group-text"
+                          id="last-name"><i class="bi bi-person"></i></span>
+                    <input type="text" class="form-control"
+                           placeholder="Прізвище" aria-label="Прі"
+                           name="user-lastname"
+                           aria-describedby="last-name">
+                </div>
+            </div>
         </div>
-        <div class="input-group">
-            <span class="input-group-text">Tel and mail</span>
-            <input name="user-tel" type="text" aria-label="Last name" class="form-control">
-            <input name="user-mail" type="text" aria-label="Last name" class="form-control">
+        <div class="row">
+            <div class="col">
+                <div class="input-group mb-3">
+                    <span class="input-group-text"
+                          id="tel-addon"><i class="bi bi-phone"></i></span>
+                    <input type="text" class="form-control"
+                           placeholder="Телефон" aria-label="Телефон"
+                           name="user-tel"
+                           aria-describedby="tel-addon">
+                </div>
+            </div>
+            <div class="col">
+                <div class="input-group mb-3">
+                    <span class="input-group-text"
+                          id="email-addon"><i class="bi bi-envelope-at"></i></span>
+                    <input type="text" class="form-control"
+                           placeholder="Е-пошта" aria-label="Е-пошта"
+                           name="user-mail"
+                           aria-describedby="email-addon">
+                </div>
+            </div>
         </div>
-        <button class="btn btn-secondary">Send</button>
+        <div class="row">
+            <div class="col">
+                <button class="btn btn-success" type="submit">Send</button>
+            </div>
+        </div>
     </form>
 }
 
