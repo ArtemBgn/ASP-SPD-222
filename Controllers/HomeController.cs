@@ -260,6 +260,26 @@ namespace ASP_SPD_222.Controllers
                     }
                 }
             }
+            else
+            {
+                String salt = _hashService.HexString(Guid.NewGuid().ToString());
+                String dk = _hashService.HexString(salt + homeWorkAspFourFormModel.Password);
+                _dataContext.HwFourUsers.Add(new()
+                {
+                    Id = Guid.NewGuid(),
+                    Login = homeWorkAspFourFormModel.Login,
+                    LastName = homeWorkAspFourFormModel.LastName,
+                    FirstName = homeWorkAspFourFormModel.FirstName,
+                    FatherName = homeWorkAspFourFormModel.FatherName,
+                    Avatar = null,
+                    RegisterDt = DateTime.Now,
+                    DeleteDt = null,
+                    Email = homeWorkAspFourFormModel.Email,
+                    PasswordSalt = salt,
+                    PasswordDk = dk,
+                });
+                _dataContext.SaveChanges();
+            }
             if (!isFormValid)
             {
                 HttpContext.Session.SetString("formModel",
