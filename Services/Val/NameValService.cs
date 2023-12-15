@@ -5,12 +5,27 @@ namespace ASP_SPD_222.Services.Val
 {
     public class NameValService : IValService
     {
+        public bool ValLoginString(string input)
+        {
+            if (String.IsNullOrEmpty(input)) { return false; }
+            bool res = true;
+            char[] tmp = input.ToUpper().ToCharArray();
+            string abets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ_.0123456789";
+            for (int i = 0; i < tmp.Length; i++)
+            {
+                if (!abets.Contains(tmp[i]))
+                {
+                    res = false;
+                }
+            }
+            return res;
+        }
         public bool ValNameString(string input)
         {
             if (input == null) { return false; }
             bool res = true;
             char[] tmp = input.ToUpper().ToCharArray();
-            string abets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ'АБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩьЮЯ";
+            string abets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ'АБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЬЮЯ";
             for (int i = 0; i < tmp.Length; i++)
             {
                 if ( (!abets.Contains(tmp[i])) || (tmp.Length < 2) )

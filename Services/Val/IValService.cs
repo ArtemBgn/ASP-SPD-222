@@ -2,7 +2,7 @@
 {
     public interface IValService
     {
-        //String ValString(String input);
+        bool ValLoginString(String input);
         bool ValNameString(String input);
         bool ValTelString(String input);
         bool ValMailString(String input);

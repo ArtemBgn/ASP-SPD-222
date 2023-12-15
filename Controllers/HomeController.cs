@@ -169,6 +169,140 @@ namespace ASP_SPD_222.Controllers
         {  
             return View();
         }
+        [HttpPost]
+        public RedirectToActionResult ProcessHomeWorkAspFour(HomeWorkAspFourFormModel? homeWorkAspFourFormModel)
+        {
+            HomeWorkAspFourValidation results = new();
+            bool isFormValid = true;
+            if (!_valService.ValLoginString(homeWorkAspFourFormModel.Login))
+            {
+                results.LoginErrorMessage = "Логін не може бути порожним та може містити лише латинські символи, цифри та нижнє підкреслення і крапку";
+                isFormValid = false;
+            }
+            if (!_valService.ValNameString(homeWorkAspFourFormModel.LastName))
+            {
+                results.LastNameErrorMessage = "Прізвище не може бути порожним, містити цифри або символи";
+                isFormValid = false;
+            }
+            if (!_valService.ValNameString(homeWorkAspFourFormModel.FirstName))
+            {
+                results.FirstNameErrorMessage = "Ім'я не може бути порожним, містити цифри або символи";
+                isFormValid = false;
+            }
+            if (!_valService.ValNameString(homeWorkAspFourFormModel.FatherName))
+            {
+                results.FatherNameErrorMessage = "По-батькові не може бути порожнім, містити цифри або символи";
+                isFormValid = false;
+            }
+            if (!_valService.ValMailString(homeWorkAspFourFormModel.Email))
+            {
+                results.EmailErrorMessage = "Email не відповідає формату";
+                isFormValid = false;
+            }
+            if (String.IsNullOrEmpty(homeWorkAspFourFormModel.Password))
+            {
+                results.PasswordErrorMessage = "Пароль не може бути порожним";
+                isFormValid = false;
+            }
+            if (homeWorkAspFourFormModel.Password != homeWorkAspFourFormModel.Repeat)
+            {
+                results.RepeatErrorMessage = "Паролі повинні співпадати";
+                isFormValid = false;
+            }
+
+            if (isFormValid && homeWorkAspFourFormModel.Avatar != null && homeWorkAspFourFormModel.Avatar.Length > 0)
+            {
+                int dotPosition = homeWorkAspFourFormModel.Avatar.FileName.LastIndexOf(".");
+                if (dotPosition == -1)
+                {
+                    results.AvatarErrorMessage = "Файли без розширення не приймаються";
+                    isFormValid = false;
+                }
+                else
+                {
+                    String ext = homeWorkAspFourFormModel.Avatar.FileName.Substring(dotPosition);
+                    if (ext != ".ico")
+                    {
+                        results.AvatarErrorMessage = "Приймаються лише файли з росширенням \".ісо\"";
+                        isFormValid = false;
+                    }
+                    else
+                    {
+                        String dir = Directory.GetCurrentDirectory();
+                        String savedName;
+                        String fileName;
+                        do
+                        {
+                            fileName = Guid.NewGuid() + ext;
+                            savedName = Path.Combine(dir, "wwwroot", "avatars", fileName);
+                        }
+                        while (System.IO.File.Exists(savedName));
+                        using Stream stream = System.IO.File.OpenWrite(savedName);
+                        homeWorkAspFourFormModel.Avatar.CopyTo(stream);
+
+                        String salt = _hashService.HexString(Guid.NewGuid().ToString());
+                        String dk = _hashService.HexString(salt + homeWorkAspFourFormModel.Password);
+                        _dataContext.HwFourUsers.Add(new()
+                        {
+                            Id = Guid.NewGuid(),
+                            Login = homeWorkAspFourFormModel.Login,
+                            LastName = homeWorkAspFourFormModel.LastName,
+                            FirstName = homeWorkAspFourFormModel.FirstName,
+                            FatherName = homeWorkAspFourFormModel.FatherName,
+                            Avatar = fileName,
+                            RegisterDt = DateTime.Now,
+                            DeleteDt = null,
+                            Email = homeWorkAspFourFormModel.Email,
+                            PasswordSalt = salt,
+                            PasswordDk = dk,
+                        });
+                        _dataContext.SaveChanges();
+                    }
+                }
+            }
+            if (!isFormValid)
+            {
+                HttpContext.Session.SetString("formModel",
+                    JsonSerializer.Serialize(homeWorkAspFourFormModel));
+
+                HttpContext.Session.SetString("formValidation",
+                    JsonSerializer.Serialize(results));
+            }
+            HttpContext.Session.SetString("formStatus",
+                isFormValid.ToString());
+
+            return RedirectToAction(nameof(HomeWorkAspFour));
+        }
+        public ViewResult HomeWorkAspFour()
+        {
+            HomeWorkAspFourViewModel viewModel = new();
+
+            if (HttpContext.Session.Keys.Contains("formStatus"))
+            {
+                viewModel.FormStatus = Convert.ToBoolean(
+                    HttpContext.Session.GetString("formStatus"));
+                HttpContext.Session.Remove("formStatus");
+
+                if (viewModel.FormStatus ?? false)
+                {
+                    viewModel.FormModel = null;
+                    viewModel.FormValidation = null;
+                }
+                else
+                {
+                    viewModel.FormModel = JsonSerializer
+                        .Deserialize<HomeWorkAspFourFormModel>(
+                            HttpContext.Session.GetString("formModel")!);
+                    HttpContext.Session.Remove("formModel");
+
+                    viewModel.FormValidation = JsonSerializer
+                        .Deserialize<HomeWorkAspFourValidation>(
+                            HttpContext.Session.GetString("formValidation")!);
+                    HttpContext.Session.Remove("formValidation");
+                }
+            }
+            return View(viewModel);
+        }
         public ViewResult SignUp()
         {
             SignupViewModel viewModel = new();

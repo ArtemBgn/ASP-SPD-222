@@ -1,0 +1,250 @@
+﻿@using ASP_SPD_222.Services.Val;
+@inject ASP_SPD_222.Services.Val.IValService valService
+@model ASP_SPD_222.Models.Home.HomeWorkAspFourViewModel
+@{
+    ViewData["Title"] = "Reg";
+}
+<h1 class="display-4">Реєстрація</h1>
+
+@if ((Model.FormModel != null) && !(valService.ValLoginString(Model.FormModel.Login)
+                               && valService.ValNameString(Model.FormModel.LastName)
+                               && valService.ValNameString(Model.FormModel.FirstName)
+                               && valService.ValNameString(Model.FormModel.FatherName)
+                               && valService.ValMailString(Model.FormModel.Email)))
+{
+    var FormModelLogin = "";
+    var FormModelLastName = "";
+    var FormModelFirstName = "";
+    var FormModelFatherName = "";
+    var FormModelEmail = "";
+
+    @if (Model.FormModel?.Login != null) { FormModelLogin = Model.FormModel.Login; }
+    @if (Model.FormModel?.LastName != null) { FormModelLastName = Model.FormModel.LastName; }
+    @if (Model.FormModel?.FirstName != null) { FormModelFirstName = Model.FormModel.FirstName; }
+    @if (Model.FormModel?.FatherName != null) { FormModelFatherName = Model.FormModel.FatherName; }
+    @if (Model.FormModel?.Email != null) { FormModelEmail = Model.FormModel.Email; }
+
+    <form method="post" enctype="multipart/form-data" asp-action="ProcessHomeWorkAspFour">
+        <div class="row">
+            <div class="col">
+                <div class="input-group mb-3">
+                    <span class="input-group-text"
+                          id="hw-login-addon"><i class="bi bi-person"></i></span>
+                    <input type="text" class="form-control"
+                           placeholder="Логін" aria-label="Логін"
+                           name="hw-login"
+                           aria-describedby="hw-login-addon"
+                           value="@FormModelLogin">
+                </div>
+            </div>
+            <div class="col">
+                <div class="input-group mb-3">
+                    <span class="input-group-text"
+                          id="hw-last-name-addon"><i class="bi bi-person-vcard"></i></span>
+                    <input type="text" class="form-control"
+                           placeholder="Прізвище" aria-label="Прізвище"
+                           name="hw-last-name"
+                           aria-describedby="hw-last-name-addon"
+                           value="@FormModelLastName">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="input-group mb-3">
+                    <span class="input-group-text"
+                          id="hw-first-name-addon"><i class="bi bi-person-vcard"></i></span>
+                    <input type="text" class="form-control"
+                           placeholder="Ім'я" aria-label="Ім'я"
+                           name="hw-first-name"
+                           aria-describedby="hw-first-name-addon"
+                           value="@FormModelFirstName">
+                </div>
+            </div>
+            <div class="col">
+                <div class="input-group mb-3">
+                    <span class="input-group-text"
+                          id="hw-father-name-addon"><i class="bi bi-person-vcard"></i></span>
+                    <input type="text" class="form-control"
+                           placeholder="По-батькові" aria-label="По-батькові"
+                           name="hw-father-name"
+                           aria-describedby="hw-father-name-addon"
+                           value="@FormModelFatherName">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="input-group mb-3">
+                    <span class="input-group-text"
+                          id="hw-email-addon"><i class="bi bi-envelope-at"></i></span>
+                    <input type="text" class="form-control"
+                           placeholder="Е-пошта" aria-label="Е-пошта"
+                           name="hw-email"
+                           aria-describedby="hw-email-addon"
+                           value="@FormModelEmail">
+                </div>
+            </div>
+            <div class="col">
+                <div class="input-group mb-3">
+                    <label class="input-group-text"
+                           for="hw-avatar-input"><i class="bi bi-person-circle"></i></label>
+                    <input type="file" class="form-control"
+                           placeholder="Аватарка" aria-label="Аватарка"
+                           name="hw-avatar"
+                           id="hw-avatar-input">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="input-group mb-3">
+                    <span class="input-group-text"
+                          id="hw-password-addon"><i class="bi bi-lock"></i></span>
+                    <input type="password" class="form-control"
+                           placeholder="Пароль" aria-label="Пароль"
+                           name="hw-password"
+                           aria-describedby="hw-password-addon">
+                </div>
+            </div>
+            <div class="col">
+                <div class="input-group mb-3">
+                    <span class="input-group-text"
+                          id="hw-repeat-addon"><i class="bi bi-unlock"></i></span>
+                    <input type="password" class="form-control"
+                           placeholder="Повторіть пароль" aria-label="Повторіть пароль"
+                           name="hw-repeat"
+                           aria-describedby="hw-repeat-addon">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <button class="btn btn-success" type="submit">Реєстрація</button>
+            </div>
+        </div>
+    </form>
+}
+else
+{
+    <form method="post" enctype="multipart/form-data" asp-action="ProcessHomeWorkAspFour">
+        <div class="row">
+            <div class="col">
+                <div class="input-group mb-3">
+                    <span class="input-group-text"
+                          id="hw-login-addon"><i class="bi bi-person"></i></span>
+                    <input type="text" class="form-control"
+                           placeholder="Логін" aria-label="Логін"
+                           name="hw-login"
+                           aria-describedby="hw-login-addon">
+                </div>
+            </div>
+            <div class="col">
+                <div class="input-group mb-3">
+                    <span class="input-group-text"
+                          id="hw-last-name-addon"><i class="bi bi-person-vcard"></i></span>
+                    <input type="text" class="form-control"
+                           placeholder="Прізвище" aria-label="Прізвище"
+                           name="hw-last-name"
+                           aria-describedby="hw-last-name-addon">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="input-group mb-3">
+                    <span class="input-group-text"
+                          id="hw-first-name-addon"><i class="bi bi-person-vcard"></i></span>
+                    <input type="text" class="form-control"
+                           placeholder="Ім'я" aria-label="Ім'я"
+                           name="hw-first-name"
+                           aria-describedby="hw-first-name-addon">
+                </div>
+            </div>
+            <div class="col">
+                <div class="input-group mb-3">
+                    <span class="input-group-text"
+                          id="hw-father-name-addon"><i class="bi bi-person-vcard"></i></span>
+                    <input type="text" class="form-control"
+                           placeholder="По-батькові" aria-label="По-батькові"
+                           name="hw-father-name"
+                           aria-describedby="hw-father-name-addon">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="input-group mb-3">
+                    <span class="input-group-text"
+                          id="hw-email-addon"><i class="bi bi-envelope-at"></i></span>
+                    <input type="text" class="form-control"
+                           placeholder="Е-пошта" aria-label="Е-пошта"
+                           name="hw-email"
+                           aria-describedby="hw-email-addon">
+                </div>
+            </div>
+            <div class="col">
+                <div class="input-group mb-3">
+                    <label class="input-group-text"
+                           for="hw-avatar-input"><i class="bi bi-person-circle"></i></label>
+                    <input type="file" class="form-control"
+                           placeholder="Аватарка" aria-label="Аватарка"
+                           name="hw-avatar"
+                           id="hw-avatar-input">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="input-group mb-3">
+                    <span class="input-group-text"
+                          id="hw-password-addon"><i class="bi bi-lock"></i></span>
+                    <input type="password" class="form-control"
+                           placeholder="Пароль" aria-label="Пароль"
+                           name="hw-password"
+                           aria-describedby="hw-password-addon">
+                </div>
+            </div>
+            <div class="col">
+                <div class="input-group mb-3">
+                    <span class="input-group-text"
+                          id="hw-repeat-addon"><i class="bi bi-unlock"></i></span>
+                    <input type="password" class="form-control"
+                           placeholder="Повторіть пароль" aria-label="Повторіть пароль"
+                           name="hw-repeat"
+                           aria-describedby="hw-repeat-addon">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <button class="btn btn-success" type="submit">Реєстрація</button>
+            </div>
+        </div>
+    </form>
+}
+
+
+@if (Model.FormStatus == true)
+{
+    <div class="alert alert-success" role="alert">
+        Реєстрація пройшла успішно
+    </div>
+}
+else
+{
+    if(Model.FormModel != null)
+    {
+        <div class="alert alert-danger" role="alert">
+            Виникли помилки реєстрації:<br />
+            <div>@Model.FormValidation?.LoginErrorMessage</div>
+            <div>@Model.FormValidation?.LastNameErrorMessage</div>
+            <div>@Model.FormValidation?.FirstNameErrorMessage</div>
+            <div>@Model.FormValidation?.FatherNameErrorMessage</div>
+            <div>@Model.FormValidation?.EmailErrorMessage</div>
+            <div>@Model.FormValidation?.PasswordErrorMessage</div>
+            <div>@Model.FormValidation?.RepeatErrorMessage</div>
+            <div>@Model.FormValidation?.AvatarErrorMessage</div>
+        </div>
+    }
+}
