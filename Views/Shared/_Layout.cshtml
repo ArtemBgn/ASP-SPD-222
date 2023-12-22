@@ -47,7 +47,9 @@
                         .First(claim => claim.Type == ClaimTypes.UserData)
                         .Value;
                         if (String.IsNullOrEmpty(avatar)) avatar = "no-photo.png";
-                        <img src="/avatars/@(avatar)" class="nav-avatar" />
+                        <a asp-controller="User" asp-action="Profile">
+                            <img src="/avatars/@(avatar)" class="nav-avatar" />
+                        </a>
                         <button type="button"
                                 id="auth-signout-button"
                                 class="btn btn-outline-info">
@@ -86,7 +88,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="authModalLabel">Modal title</h5>
+                    <h5 class="modal-title" id="authModalLabel">Вікно для входу</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
