@@ -46,12 +46,14 @@ namespace ASP_SPD_222.Controllers
         }
 
         [HttpDelete]
-        public void SignOut()    // що передавать у метод?
+        public object SignOut()    // що передавать у метод?
         {
             if (HttpContext.User.Identity?.IsAuthenticated ?? false)
             {
                 HttpContext.Session.Remove("AuthUserId");
+                return new { status = 200 };
             }
+            return new { status = 300 };
         }
     }
 }

@@ -53,8 +53,25 @@ else
                             @if (Model.IsPersonal)
                             {
                                 <button id="profile-save-button" class="btn btn-success">Зберігти</button>
-                                <button id="profile-exit-button" class="btn btn-warning">ВИХІД</button>
+                                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#authModal2">ВИХІД</button>
+                                <div id="auth-message2" class="alert alert-danger visually-hidden" role="alert"></div>
                             }
+
+                            <div class="modal fade" id="authModal2" aria-labelledby="authModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="authModalLabel2">Підтвердження виходу</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-warning" data-bs-dismiss="modal" aria-label="Close">Повернутися</button>
+                                            <button id="profile-exit-button" type="button" class="btn btn-primary">Вийти з профілю</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>

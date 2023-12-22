@@ -65,7 +65,19 @@ function exitProfileButtonClick() {
     
     fetch(`/api/auth`, { method: 'DELETE' })
         .then(r => {
-            console.log("Кнопка працює");
-            window.location.href = "/Home/Index";
+            if (r.ok) {
+                console.log("Кнопка працює");
+                //showAuthMessage2(r.status);
+                window.location.href = "/Home/Index";
+            }
+            else {
+                showAuthMessage2(r.status +" - Server error");
+            }
         });
+}
+function showAuthMessage2(message) {
+    const authMessage2 = document.getElementById("auth-message2");
+    if (!authMessage2) throw "Element #auth-message not found";
+    authMessage2.innerText = message;
+    authMessage2.classList.remove("visually-hidden");
 }
