@@ -101,7 +101,17 @@ namespace ASP_SPD_222.Controllers
             user.Avatar = "";
             user.PasswordDk = "";
             user.PasswordSalt = "";
-            await _dataContext.SaveChangesAsync();
+            await _dataContext.SaveChangesAsync();//*/
+            return Json(new { status = 200 });
+        }
+        [HttpGet]
+        public async Task<JsonResult> OffProfile()
+        {
+            var user = this.GetAuthUser();
+            if (user == null) { return Json(new { status = 401 }); }
+            user.DeleteDt = DateTime.Now; // встановлюємо "ознаку" видалення
+            // у зв'язку з виключенням профілю не видаляємо персональні данні
+            await _dataContext.SaveChangesAsync();//*/
             return Json(new { status = 200 });
         }
         private Data.Entities.User? GetAuthUser()
@@ -120,6 +130,27 @@ namespace ASP_SPD_222.Controllers
 
             }
             return null;
+        }
+        [HttpGet]
+        public async Task<JsonResult> RecoveryProfile()
+        {
+            UserProfileViewModel model = new();
+            if (HttpContext.User.Identity?.IsAuthenticated ?? false)
+            {
+                model.IsPersonal = true;
+                // шукаємо дані користувача за Claim
+                String sid = HttpContext
+                    .User
+                    .Claims
+                    .First(claim => claim.Type == ClaimTypes.Sid)
+                    .Value;
+                // шукаємо у контексті даних (у БД)
+                model.User = _dataContext.Users.Find(Guid.Parse(sid));
+                model.User.DeleteDt = null;
+                await _dataContext.SaveChangesAsync();
+                return Json(new { status = 200 });
+            }
+            return Json(new { status = 300 });
         }
     }
 }

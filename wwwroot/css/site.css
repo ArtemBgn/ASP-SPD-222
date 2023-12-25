@@ -90,14 +90,12 @@ body {
 @media screen and (min-width: 576px) {
          .pe-sm-6, .px-sm-6 {
                 padding-right: 3.5rem;
-            
     }
 }
 
 @media screen and (min-width: 576px) {
          .ps-sm-6, .px-sm-6 {
                 padding-left: 3.5rem;
-            
     }
 }
 

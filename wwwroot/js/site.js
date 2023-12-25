@@ -8,6 +8,14 @@
     const exitProfileButton = document.getElementById("profile-exit-button")
     if (exitProfileButton) exitProfileButton.addEventListener('click', exitProfileButtonClick);
 
+    const offProfileButton = document.getElementById("profile-off-button")
+    if (offProfileButton) offProfileButton.addEventListener('click', offProfileButtonClick);
+
+    const deleteProfileButton = document.getElementById("profile-delete-button")
+    if (deleteProfileButton) deleteProfileButton.addEventListener('click', deleteProfileButtonClick);
+
+    const recoveryProfileButton = document.getElementById("profile-recovery-button")
+    if (recoveryProfileButton) recoveryProfileButton.addEventListener('click', recoveryProfileButtonClick);
 });
 
 function authButtonClick() {
@@ -80,4 +88,35 @@ function showAuthMessage2(message) {
     if (!authMessage2) throw "Element #auth-message not found";
     authMessage2.innerText = message;
     authMessage2.classList.remove("visually-hidden");
+}
+function offProfileButtonClick() {
+    fetch(`/user/OffProfile`, { method: 'GET' })
+        .then(r => r.json())
+        .then(j => {
+            console.log(j);
+            exitProfileButtonClick();
+        });
+}
+function deleteProfileButtonClick() {
+    fetch(`/user/DeleteProfile`, { method: 'DELETE' })
+        .then(r => r.json())
+        .then(j => {
+            console.log(j);
+            exitProfileButtonClick();
+        });
+}
+//function showAuthMessage3(message) {
+//    const authMessage3 = document.getElementById("auth-message3");
+//    if (!authMessage3) throw "Element #auth-message not found";
+//    authMessage3.innerText = message;
+//    authMessage3.classList.remove("visually-hidden");
+//}
+
+function recoveryProfileButtonClick() {
+    fetch(`/user/RecoveryProfile`, { method: 'GET' })
+        .then(r => r.json())
+        .then(j => {
+            console.log(j);
+            window.location.reload();
+        });
 }

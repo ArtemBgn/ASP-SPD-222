@@ -10,6 +10,25 @@
         Користувач не знайдений
     </div>
 }
+else if(Model.User.DeleteDt != null)
+{
+    @if (!Model.IsPersonal)
+    {
+        <span>Профіль видалено</span>
+    }
+    else
+    {
+        <h2>Раніше Ви вимкнули свій профіль</h2>
+        <h3>Наступні дані готові до відновлення</h3>
+        <span>ПІБ: @(Model.User.Name)</span><br />
+        <span>Login: @(Model.User.Login)</span><br />
+        <span>E-mail: @(Model.User.Email)</span><br />
+        <span>Дата реєстрації: @(Model.User.RegisterDt)</span><br />
+        <button id="profile-recovery-button" type="button" class="btn btn-success">Відновити профіль</button>
+        <button id="profile-exit-button" type="button" class="btn btn-warning">Вийти з профілю</button>
+        <button id="profile-delete-button" type="button" class="btn btn-danger">Видалити профіль повністью</button>
+    }
+}
 else
 {
     <div class="row">
@@ -48,12 +67,18 @@ else
                                     }
                                 </li>
                                 <li class="mb-2 mb-xl-3 display-28"><span class="display-26 text-secondary me-2 font-weight-600">Register:</span> @(Model.User.RegisterDt)</li>
-                                <!--<li class="display-28"><span class="display-26 text-secondary me-2 font-weight-600">Id:</span> </li>-->
+                                <li class="display-28">
+                                    @if(Model.User.DeleteDt != null)
+                                    {
+                                        <span class="display-26 text-secondary me-2 font-weight-600">Date deleted:</span> @(Model.User.DeleteDt)
+                                    }
+                                </li>
                             </ul>
                             @if (Model.IsPersonal)
                             {
                                 <button id="profile-save-button" class="btn btn-success">Зберігти</button>
                                 <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#authModal2">ВИХІД</button>
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#authModal3">Видалення профілю</button>
                                 <div id="auth-message2" class="alert alert-danger visually-hidden" role="alert"></div>
                             }
 
@@ -65,8 +90,23 @@ else
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-warning" data-bs-dismiss="modal" aria-label="Close">Повернутися</button>
-                                            <button id="profile-exit-button" type="button" class="btn btn-primary">Вийти з профілю</button>
+                                            <button type="button" class="btn btn-success" data-bs-dismiss="modal" aria-label="Close">Повернутися</button>
+                                            <button id="profile-exit-button" type="button" class="btn btn-warning">Вийти з профілю</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal fade" id="authModal3" aria-labelledby="authModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="authModalLabel2">Ви дійсно бажаєте видалити профіль?</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button id="profile-off-button" type="button" class="btn btn-warning">Вимкнути профіль</button>
+                                            <button id="profile-delete-button" type="button" class="btn btn-danger">Видалити профіль</button>
                                         </div>
                                     </div>
                                 </div>
